@@ -1,0 +1,31 @@
+<source>
+  type syslog
+  port <%= @remote_port %> 
+  bind 0.0.0.0
+  tag sp
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>.*)::(?<operation>.*):\s(?<message>.*)$/
+</source>
+
+
+<match sp.local4.*>
+  type copy
+  
+  <store>
+    type 		file
+    path 		/var/log/td-agent/sp
+    time_slice_format 	%Y%m%d
+    time_slice_wait 	10m
+    time_format 	%Y%m%dT%H%M%S%z
+    compress 		gzip
+    utc
+   </store>
+
+  <store>
+    type		elasticsearch
+    host		<%= @elasticsearch_host %>
+    port 		9200
+    logstash_format 	true
+    flush_interval      5s
+  </store>
+</match>
+
