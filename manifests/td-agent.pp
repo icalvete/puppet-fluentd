@@ -1,4 +1,8 @@
-class fluentd::td-agent () inherits fluentd::params {
+class fluentd::td-agent (
+
+  $elasticsearch_host = $fluentd::params::elasticsearch_host
+
+) inherits fluentd::params {
 
   anchor {'fluentd::td-agent::begin':
     before => Class['fluentd::td-agent::preinstall']
