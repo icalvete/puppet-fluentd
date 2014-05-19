@@ -1,5 +1,6 @@
 class fluentd::td-agent (
 
+  $config_template    = undef,
   $elasticsearch_host = $fluentd::params::elasticsearch_host
 
 ) inherits fluentd::params {
@@ -14,7 +15,8 @@ class fluentd::td-agent (
     require => Class['fluentd::td-agent::preinstall']
   }
   class {'fluentd::td-agent::config':
-    require => Class['fluentd::td-agent::install']
+    config_template => $config_template,
+    require         => Class['fluentd::td-agent::install']
   }
   class {'fluentd::td-agent::service':
     subscribe => Class['fluentd::td-agent::config']
