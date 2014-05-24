@@ -17,7 +17,7 @@
   type parser
   key_name message
   
-  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*):\s(?<message>.*)$/
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*?):\s(?<message>.*)$/
   add_prefix processed
 </match>
 
@@ -25,7 +25,7 @@
   type parser
   key_name message
   
-  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*):\s(?<message>.*)$/
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*?):\s(?<message>.*)$/
   add_prefix processed
 </match>
 
@@ -33,7 +33,7 @@
   type parser
   key_name message
 
-  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*):\s<frm><mac>(?<mac>[0-9]*)</mac><devid>(?<devid>.*)</devid>(?<message>.*)</frm>$/
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*?):\s<frm><mac>(?<mac>[0-9]*)</mac><devid>(?<devid>.*)</devid>(?<message>.*)</frm>$/
   add_prefix processed
 </match>
 
