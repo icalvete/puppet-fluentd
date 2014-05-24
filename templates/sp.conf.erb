@@ -22,7 +22,7 @@
 
   <store>
     type		elasticsearch
-    host		<%= @elasticsearch_host %>
+    host		<%= scope.lookupvar('fluentd::td-agent::elasticsearch_host') %>
     port 		9200
     logstash_format 	true
     flush_interval      5s
@@ -45,10 +45,9 @@
 
   <store>
     type		elasticsearch
-    host		<%= @elasticsearch_host %>
+    host		<%= scope.lookupvar('fluentd::td-agent::elasticsearch_host') %>
     port 		9200
     logstash_format 	true
     flush_interval      5s
   </store>
  </match>
-

@@ -1,0 +1,60 @@
+<source>
+  type syslog
+  port <%= @remote_port %>
+  bind 0.0.0.0
+  tag sp
+  format none
+</source>
+
+<match sp.**>
+  type rewrite_tag_filter
+  rewriterule1 message frm frm
+  rewriterule2 message ::apache apache
+  rewriterule3 message ::php php
+</match>
+
+<match apache>
+  type parser
+  key_name message
+  
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*):\s(?<message>.*)$/
+  add_prefix processed
+</match>
+
+<match php>
+  type parser
+  key_name message
+  
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*):\s(?<message>.*)$/
+  add_prefix processed
+</match>
+
+<match frm>
+  type parser
+  key_name message
+
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*):\s<frm><mac>(?<mac>[0-9]*)</mac><devid>(?<devid>.*)</devid>(?<message>.*)</frm>$/
+  add_prefix processed
+</match>
+
+<match processed.*>
+  type copy
+
+  <store>
+    type 		file
+    path 		/var/log/td-agent/sp
+    time_slice_format 	%Y%m%d
+    time_slice_wait 	10m
+    time_format 	%Y%m%dT%H%M%S%z
+    compress 		gzip
+    utc
+   </store>
+
+  <store>
+    type		elasticsearch
+    host		<%= scope.lookupvar('fluentd::td-agent::elasticsearch_host') %>
+    port 		9200
+    logstash_format 	true
+    flush_interval      5s
+  </store>
+</match>

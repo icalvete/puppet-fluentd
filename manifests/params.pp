@@ -3,7 +3,7 @@ class fluentd::params {
   $package_td_agent   = 'td-agent'
 
   $fluent_gem         = '/usr/lib/fluent/ruby/bin/fluent-gem'
-  $plugins            = ['fluent-plugin-geoip ', 'fluent-plugin-elasticsearch']
+  $plugins            = ['fluent-plugin-geoip ', 'fluent-plugin-elasticsearch', 'fluent-plugin-parser']
 
   $remote_port        = hiera('syslog_remote_port')
   $elasticsearch_host = hiera('elasticsearch_vip')
