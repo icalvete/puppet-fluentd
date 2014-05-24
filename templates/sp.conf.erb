@@ -3,7 +3,7 @@
   port <%= @remote_port %>
   bind 0.0.0.0
   tag sp
-  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*):\s(?<message>.*)$/
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*?):\s(?<message>.*)$/
 </source>
 
 
