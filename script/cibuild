@@ -7,7 +7,7 @@ echo "### Check Puppet Style: ###"
 echo
 for file in `find ./manifests -type f`; do
 	echo "Checking ${file}."
-	bundle exec puppet-lint $file
+	bundle exec puppet-lint --no-autoloader_layout-check $file
 done
 echo
 
