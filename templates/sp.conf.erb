@@ -3,11 +3,67 @@
   port <%= @remote_port %>
   bind 0.0.0.0
   tag sp
-  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<environment>.*)::(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<operation>.*?):\s(?<message>.*)$/
+  format none
 </source>
 
+<match sp.**>
+  type record_reformer
 
-<match sp.local4.*>
+  tag reformed.${tag}
+  <record>
+    hostname ${hostname}
+    severity ${tag_parts[2]}
+    message ${message}
+  </record>
+</match>
+
+<match reformed.sp.local3.*>
+  type rewrite_tag_filter
+  rewriterule1 message ::apache:: apache.${tag_parts[2]}
+  rewriterule2 message ::php php.${tag_parts[2]}
+</match>
+
+<match apache.*>
+  type parser
+  key_name message
+  reserve_data yes
+
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<environment>[A-Z]*)::(?<operation>[a-zA-Z0-9_\/\.\-]*?):\s(?<message>.*)$/
+  add_prefix processed3
+</match>
+
+<match php.*>
+  type parser
+  key_name message
+  reserve_data yes
+
+  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<environment>[A-Z]*)::(?<operation>[a-zA-Z0-9_\/\.\-]*?):\s(?<message>.*)$/
+  add_prefix processed3
+</match>
+
+<match processed3.**>
+  type copy
+
+  <store>
+    type 		file
+    path 		/var/log/td-agent/sp_l3
+    time_slice_format 	%Y%m%d
+    time_slice_wait 	10m
+    time_format 	%Y%m%dT%H%M%S%z
+    compress 		gzip
+    utc
+   </store>
+
+  <store>
+    type		elasticsearch
+    host		<%= scope.lookupvar('fluentd::td-agent::elasticsearch_host') %>
+    port 		9200
+    logstash_format 	true
+    flush_interval      5s
+  </store>
+</match>
+
+<match processed4.**>
   type copy
 
   <store>
@@ -27,10 +83,9 @@
     logstash_format 	true
     flush_interval      5s
   </store>
- </match>
+</match>
 
-
-<match sp.local5.*>
+<match processed5.**>
   type copy
 
   <store>
@@ -50,4 +105,4 @@
     logstash_format 	true
     flush_interval      5s
   </store>
- </match>
+</match>

@@ -1,18 +1,16 @@
-class fluentd::td-agent::config (
+class fluentd::td-agent::config {
 
-  $config_template = "${module_name}/sp.conf.erb"
-
-) {
+  $config_file = "${module_name}/sp.conf.erb"
 
   file{ "${fluentd::params::config_dir}/conf.d/":
     ensure => directory,
     mode   => '0755',
-    before => File['fluentd_custom_config']
+    before => File['fluentd_config']
   }
 
-  file{'fluentd_custom_config':
+  file{'fluentd_config':
     ensure  => present,
-    content => template($config_template),
+    content => template($config_file),
     path    => "${fluentd::params::config_dir}/conf.d/sp.conf",
     mode    => '0644',
   }
