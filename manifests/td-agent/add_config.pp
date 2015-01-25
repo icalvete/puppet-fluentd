@@ -14,6 +14,7 @@ define fluentd::td-agent::add_config {
     source  => "puppet:///modules/${path}/${file}",
     path    => "${fluentd::params::config_dir}/conf.d/${file}.conf",
     mode    => '0644',
-    require => Class['fluentd::td-agent::config']
+    require => Class['fluentd::td-agent::config'],
+    notify  => Class['fluentd::td-agent::service']
   }
 }
