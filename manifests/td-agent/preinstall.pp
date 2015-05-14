@@ -16,7 +16,7 @@ class fluentd::td-agent::preinstall {
   file{ 'add_treasure-data_repo':
     ensure  => present,
     path    => '/etc/apt/sources.list.d/treasure-data.list',
-    content => "deb http://packages.treasure-data.com/precise/ precise contrib",
+    content => "${fluentd::params::treasure_data_repo}\n",
     mode    => '0664',
     require => Exec['add_fluentd_gpg_key'],
     notify  => Exec['update_treasure-data_repo'],
