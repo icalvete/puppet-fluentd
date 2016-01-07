@@ -46,7 +46,7 @@
 
   <store>
     type 		file
-    path 		/var/log/td-agent/sp_l3
+    path 		/var/log/td_agent/sp_l3
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
     time_format 	%Y%m%dT%H%M%S%z
@@ -56,7 +56,7 @@
 
   <store>
     type		elasticsearch
-    host		<%= scope.lookupvar('fluentd::td-agent::elasticsearch_host') %>
+    host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
     logstash_format 	true
     flush_interval      5s
@@ -68,7 +68,7 @@
 
   <store>
     type 		file
-    path 		/var/log/td-agent/sp_l4
+    path 		/var/log/td_agent/sp_l4
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
     time_format 	%Y%m%dT%H%M%S%z
@@ -78,7 +78,7 @@
 
   <store>
     type		elasticsearch
-    host		<%= scope.lookupvar('fluentd::td-agent::elasticsearch_host') %>
+    host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
     logstash_format 	true
     flush_interval      5s
@@ -90,7 +90,7 @@
 
   <store>
     type 		file
-    path 		/var/log/td-agent/sp_l5
+    path 		/var/log/td_agent/sp_l5
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
     time_format 	%Y%m%dT%H%M%S%z
@@ -100,7 +100,7 @@
 
   <store>
     type		elasticsearch
-    host		<%= scope.lookupvar('fluentd::td-agent::elasticsearch_host') %>
+    host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
     logstash_format 	true
     flush_interval      5s

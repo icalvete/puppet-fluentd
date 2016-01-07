@@ -35,4 +35,6 @@ class fluentd::params {
       fail ("${::operatingsystem} not supported.")
     }
   }
+
+  $main_config = "${module_name}/sp.conf.erb"
 }
