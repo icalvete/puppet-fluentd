@@ -1,6 +1,7 @@
 class fluentd::td_agent (
 
   $elasticsearch_host = $fluentd::params::elasticsearch_host,
+  $elasticsearch_port = $fluentd::params::elasticsearch_port,
   $main_config = $fluentd::params::main_config
 
 ) inherits fluentd::params {

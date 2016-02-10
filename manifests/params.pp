@@ -6,6 +6,7 @@ class fluentd::params {
 
   $remote_port        = hiera('syslog_remote_port')
   $elasticsearch_host = hiera('elasticsearch_vip')
+  $elasticsearch_port = 9200
 
   case $::operatingsystem {
     /^(Debian|Ubuntu)$/: {
