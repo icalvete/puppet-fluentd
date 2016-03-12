@@ -11,16 +11,15 @@
 
   tag reformed.${tag}
   <record>
-    hostname ${hostname}
-    severity ${tag_parts[2]}
-    message ${message}
+    n ${hostname}
+    s ${tag_parts[2]}
+    f ${tag_parts[1]}
   </record>
 </match>
 
 <match reformed.sp.local3.*>
   type rewrite_tag_filter
   rewriterule1 message ::apache:: apache.${tag_parts[2]}
-  rewriterule2 message ::php php.${tag_parts[2]}
 </match>
 
 <match apache.*>
@@ -28,7 +27,7 @@
   key_name message
   reserve_data yes
 
-  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<environment>[A-Z]*)::(?<operation>[a-zA-Z0-9_\/\.\-]*?):\s(?<message>.*)$/
+  format /^(?<t>[^ ]*\s*[^ ]* [^ ]*) (?<h>[^ ]*) ::(?<a>[a-zA-Z0-9_\/\.\-]*)::(?<e>[A-Z]*)::(?<o>[a-zA-Z0-9_\/\.\-]*):\s(?<ip>[^ ]*) (?<ip2>[a-zA-Z0-9_\/\.\-]*) (?<rl>[a-zA-Z0-9_\/\.\-]*) (?<ru>[a-zA-Z0-9_\/\.\-]*) (?<rt>\[.*\]) "(?<met>[A-Z]*) \/(?<pqf>[a-zA-Z0-9_\/\.\-\?=&@]*) (?<hv>[^ ]*)" (?<st>[]0-9]*) (?<bs>[]0-9]*) "(?<ref>[^ ]*)" "(?<ua>[a-zA-Z0-9_\/\.\-\+\(\)\s:;.,\[\]\?@]*?)" (?<vh>.*):(?<p>[0-9]*) (?<rpt>[0-9]*)$/
   add_prefix processed3
 </match>
 
@@ -37,8 +36,8 @@
   key_name message
   reserve_data yes
 
-  format /^(?<time>[^ ]*\s*[^ ]* [^ ]*) (?<host>[^ ]*) (?<ident>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pid>[0-9]+)\])?[^\:]*\: *:(?<application>[a-zA-Z0-9_\/\.\-]*)::(?<environment>[A-Z]*)::(?<operation>[a-zA-Z0-9_\/\.\-]*?):\s(?<message>.*)$/
-  add_prefix processed3
+  format /^(?<t>[^ ]*\s*[^ ]* [^ ]*) (?<h>[^ ]*) (?<it>[a-zA-Z0-9_\/\.\-]*)(?:\[(?<pd>[0-9]+)\])?[^\:]*\: *:(?<a>[a-zA-Z0-9_\/\.\-]*)::(?<e>[A-Z]*)::(?<o>[a-zA-Z0-9_\/\.\-]*?):\s(?<m>.*)$/
+  add_prefix processed4
 </match>
 
 <match processed3.**>
@@ -46,7 +45,7 @@
 
   <store>
     type 		file
-    path 		/var/log/td_agent/sp_l3
+    path 		/var/log/td-agent/sp_l3
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
     time_format 	%Y%m%dT%H%M%S%z
@@ -58,8 +57,9 @@
     type		elasticsearch
     host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
-    logstash_format 	true
-    flush_interval      5s
+    logstash_format  true
+    logstash_prefix  logstash_apache
+    flush_interval   5s
   </store>
 </match>
 
@@ -68,7 +68,7 @@
 
   <store>
     type 		file
-    path 		/var/log/td_agent/sp_l4
+    path 		/var/log/td-agent/sp_l4
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
     time_format 	%Y%m%dT%H%M%S%z
@@ -80,17 +80,30 @@
     type		elasticsearch
     host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
-    logstash_format 	true
-    flush_interval      5s
+    logstash_format  true
+    logstash_prefix  logstash_operation
+    flush_interval   5s
   </store>
 </match>
 
 <match processed5.**>
+  type record_reformer
+
+  tag extra.${tag}
+  <record>
+    n ${hostname}
+    s ${tag_parts[4]}
+    f ${tag_parts[3]}
+  </record>
+
+</match>
+
+<match extra.processed5.**>
   type copy
 
   <store>
     type 		file
-    path 		/var/log/td_agent/sp_l5
+    path 		/var/log/td-agent/sp_l5
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
     time_format 	%Y%m%dT%H%M%S%z
@@ -102,7 +115,9 @@
     type		elasticsearch
     host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
-    logstash_format 	true
-    flush_interval      5s
+    logstash_format  true
+    logstash_prefix  logstash_business
+    logstash_dateformat %Y.%m
+    flush_interval   5s
   </store>
 </match>

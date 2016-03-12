@@ -4,7 +4,8 @@ class fluentd::params {
 
   $plugins            = ['fluent-plugin-geoip ', 'fluent-plugin-elasticsearch', 'fluent-plugin-parser', 'fluent-plugin-record-reformer']
 
-  $remote_port        = hiera('syslog_remote_port')
+  $remote_port        = hiera('fluentd_remote_port')
+
   $elasticsearch_host = hiera('elasticsearch_vip')
   $elasticsearch_port = 9200
 
