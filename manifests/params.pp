@@ -2,11 +2,16 @@ class fluentd::params {
 
   $package_td_agent   = 'td-agent'
 
-  $plugins            = ['fluent-plugin-geoip ', 'fluent-plugin-elasticsearch', 'fluent-plugin-parser', 'fluent-plugin-record-reformer']
+  $plugins            = [
+    'fluent-plugin-geoip ',
+    'fluent-plugin-elasticsearch',
+    'fluent-plugin-parser',
+    'fluent-plugin-record-reformer'
+  ]
 
-  $remote_port        = hiera('fluentd_remote_port')
+  $remote_port        = hiera('fluentd_remote_port', '5514')
 
-  $elasticsearch_host = hiera('elasticsearch_vip')
+  $elasticsearch_host = hiera('elasticsearch_vip', '127.0.0.1')
   $elasticsearch_port = 9200
 
   case $::operatingsystem {
@@ -16,7 +21,8 @@ class fluentd::params {
       $config_file = "${config_dir}/td-agent.conf"
       $package     = [
         'libcurl4-nss-dev',
-        'libgeoip-dev'
+        'libgeoip-dev',
+        'libc6-dev'
       ]
     }
     default: {
@@ -26,17 +32,23 @@ class fluentd::params {
 
   case $::lsbdistcodename {
     /^precise/: {
-      $treasure_data_repo = 'deb http://packages.treasure-data.com/precise/ precise contrib'
-      $fluent_gem         = '/usr/lib/fluent/ruby/bin/fluent-gem'
+      $treasure_data_location = 'http://packages.treasure-data.com/precise/'
+      $fluent_gem             = '/usr/lib/fluent/ruby/bin/fluent-gem'
     }
     /^trusty/: {
-      $treasure_data_repo = 'deb [arch=amd64] http://packages.treasuredata.com/2/ubuntu/trusty/ trusty contrib'
-      $fluent_gem         = '/opt/td-agent/embedded/bin/fluent-gem'
+      $treasure_data_location = 'http://packages.treasuredata.com/2/ubuntu/trusty/'
+      $fluent_gem             = '/opt/td-agent/embedded/bin/fluent-gem'
+    }
+    /^xenial/: {
+      $treasure_data_location = 'http://packages.treasuredata.com/2/ubuntu/xenial/'
+      $fluent_gem             = '/opt/td-agent/embedded/bin/fluent-gem'
     }
     default: {
       fail ("${::operatingsystem} not supported.")
     }
   }
 
-  $main_config = "${module_name}/sp.conf.erb"
+  $treasure_data_key_id = 'BEE682289B2217F45AF4CC3F901F9177AB97ACBE'
+
+  $main_config          = "${module_name}/sp.conf.erb"
 }
