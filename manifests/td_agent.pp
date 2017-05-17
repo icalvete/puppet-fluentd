@@ -8,13 +8,10 @@ class fluentd::td_agent (
 ) inherits fluentd::params {
 
   anchor {'fluentd::td_agent::begin':
-    before => Class['fluentd::td_agent::preinstall']
-  }
-  class {'fluentd::td_agent::preinstall':
-    require => Anchor['fluentd::td_agent::begin']
+    before => Class['fluentd::td_agent::install']
   }
   class {'fluentd::td_agent::install':
-    require => Class['fluentd::td_agent::preinstall']
+    require => Anchor['fluentd::td_agent::begin']
   }
   class {'fluentd::td_agent::config':
     require => Class['fluentd::td_agent::install']
