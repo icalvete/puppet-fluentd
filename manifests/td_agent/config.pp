@@ -16,7 +16,7 @@ class fluentd::td_agent::config {
   }
 
   exec{ 'active_td_agent_includes':
-    command  => "/bin/echo 'include ${fluentd::params::config_dir}/conf.d/*.conf' >> ${fluentd::params::config_file}",
+    command  => "/bin/echo '@include ${fluentd::params::config_dir}/conf.d/*.conf' >> ${fluentd::params::config_file}",
     unless   => "/bin/grep include ${fluentd::params::config_file}",
     provider => 'shell'
   }
