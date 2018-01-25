@@ -6,7 +6,8 @@ class fluentd::params {
     'fluent-plugin-geoip ',
     'fluent-plugin-elasticsearch',
     'fluent-plugin-parser',
-    'fluent-plugin-record-reformer'
+    'fluent-plugin-record-reformer',
+    'fluent-plugin-ignore-filter',
   ]
 
   $remote_port        = hiera('fluentd_remote_port', '5514')
