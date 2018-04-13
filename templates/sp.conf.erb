@@ -1,9 +1,10 @@
 <source>
   type syslog
-  port <%= @remote_port %>
+  port <%= scope.lookupvar('fluentd::td_agent::remote_port') %>
   bind 0.0.0.0
   tag sp
   format none
+  protocol_type <%= scope.lookupvar('fluentd::td_agent::protocol_type') %>
 </source>
 
 <match sp.**>

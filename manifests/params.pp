@@ -52,5 +52,5 @@ class fluentd::params {
   $treasure_data_key_id = 'BEE682289B2217F45AF4CC3F901F9177AB97ACBE'
 
   $main_config   = "${module_name}/sp.conf.erb"
-  $protocol_type = 'udp'
+  $protocol_type = 'tcp'
 }
