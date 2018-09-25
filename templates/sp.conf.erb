@@ -1,5 +1,5 @@
 <source>
-  type syslog
+  @type syslog
   port <%= scope.lookupvar('fluentd::td_agent::remote_port') %>
   bind 0.0.0.0
   tag sp
@@ -7,8 +7,12 @@
   protocol_type <%= scope.lookupvar('fluentd::td_agent::protocol_type') %>
 </source>
 
+<match fluent.**>
+  @type null
+</match>
+
 <match sp.**>
-  type record_reformer
+  @type record_reformer
 
   tag reformed.${tag}
   <record>
@@ -19,12 +23,12 @@
 </match>
 
 <match reformed.sp.local3.*>
-  type rewrite_tag_filter
+  @type rewrite_tag_filter
   rewriterule1 message ::apache:: apache.${tag_parts[2]}
 </match>
 
 <match apache.*>
-  type parser
+  @type parser
   key_name message
   reserve_data yes
 
@@ -33,7 +37,7 @@
 </match>
 
 <match php.*>
-  type parser
+  @type parser
   key_name message
   reserve_data yes
 
@@ -42,10 +46,10 @@
 </match>
 
 <match processed3.**>
-  type copy
+  @type copy
 
   <store>
-    type 		file
+    @type 		file
     path 		/var/log/td-agent/sp_l3
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
@@ -55,7 +59,7 @@
    </store>
 
   <store>
-    type		elasticsearch
+    @type		elasticsearch
     host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
     logstash_format  true
@@ -65,10 +69,10 @@
 </match>
 
 <match processed4.**>
-  type copy
+  @type copy
 
   <store>
-    type 		file
+    @type 		file
     path 		/var/log/td-agent/sp_l4
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
@@ -78,7 +82,7 @@
    </store>
 
   <store>
-    type		elasticsearch
+    @type		elasticsearch
     host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
     logstash_format  true
@@ -88,7 +92,7 @@
 </match>
 
 <match processed5.**>
-  type record_reformer
+  @type record_reformer
 
   tag extra.${tag}
   <record>
@@ -100,10 +104,10 @@
 </match>
 
 <match extra.processed5.**>
-  type copy
+  @type copy
 
   <store>
-    type 		file
+    @type 		file
     path 		/var/log/td-agent/sp_l5
     time_slice_format 	%Y%m%d
     time_slice_wait 	10m
@@ -113,7 +117,7 @@
    </store>
 
   <store>
-    type		elasticsearch
+    @type		elasticsearch
     host		<%= scope.lookupvar('fluentd::td_agent::elasticsearch_host') %>
     port 		9200
     logstash_format  true
