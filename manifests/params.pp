@@ -44,8 +44,12 @@ class fluentd::params {
       $treasure_data_location = 'http://packages.treasuredata.com/2/ubuntu/xenial/'
       $fluent_gem             = '/opt/td-agent/embedded/bin/fluent-gem'
     }
+    /^bionic/: {
+      $treasure_data_location = 'http://packages.treasuredata.com/2/ubuntu/bionic/'
+      $fluent_gem             = '/opt/td-agent/embedded/bin/fluent-gem'
+    }
     default: {
-      fail ("${::operatingsystem} not supported.")
+      fail ("${::lsbdistcodename} not supported.")
     }
   }
 
