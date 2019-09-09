@@ -5,12 +5,12 @@ class fluentd::td_agent::install {
     repos    => "${lsbdistcodename} contrib",
     key      => {
       'id'     => $fluentd::params::treasure_data_key_id,
-      'server' => 'pgp.mit.edu',
+      'server' => 'hkp://keyserver.ubuntu.com:80',
     },
   }
 
   package{ $fluentd::params::package_td_agent:
-    ensure => present,
+    ensure  => present,
     require => [
       Apt::Source['td_agent'],
       Class['apt::update']]

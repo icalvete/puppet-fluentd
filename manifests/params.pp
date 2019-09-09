@@ -45,7 +45,7 @@ class fluentd::params {
       $fluent_gem             = '/opt/td-agent/embedded/bin/fluent-gem'
     }
     /^bionic/: {
-      $treasure_data_location = 'http://packages.treasuredata.com/2/ubuntu/bionic/'
+      $treasure_data_location = 'http://packages.treasuredata.com/3/ubuntu/bionic/'
       $fluent_gem             = '/opt/td-agent/embedded/bin/fluent-gem'
     }
     default: {
